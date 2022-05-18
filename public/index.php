@@ -10,6 +10,7 @@ use Middlewares\FastRoute;
 use Middlewares\RequestHandler;
 use Relay\Relay;
 use function DI\create;
+use function DI\get;
 use function FastRoute\simpleDispatcher;
 
 require_once dirname(__DIR__) . '/vendor/autoload.php';
@@ -20,7 +21,8 @@ $containerBuilder = new ContainerBuilder();
 $containerBuilder->useAutowiring(false);
 $containerBuilder->useAnnotations(false);
 $containerBuilder->addDefinitions([
-    HelloWorld::class => create(HelloWorld::class),
+    HelloWorld::class => create(HelloWorld::class)->constructor(get('Foo')),
+    'Foo' => 'bar'
 ]);
 
 $middlewareQueue = [];
@@ -32,7 +34,7 @@ $routes = simpleDispatcher(function (RouteCollector $r) {
 });
 
 $middlewareQueue[] = new FastRoute($routes);
-$middlewareQueue[] = new RequestHandler();
+$middlewareQueue[] = new RequestHandler($container);
 
 $requestHandler = new Relay($middlewareQueue);
 
