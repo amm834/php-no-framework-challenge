@@ -10,7 +10,11 @@
     }
   ],
   "require": {
-    "php-di/php-di": "^6.4"
+    "php-di/php-di": "^6.4",
+    "relay/relay": "^2.1",
+    "middlewares/fast-route": "^2.0",
+    "middlewares/request-handler": "^2.0",
+    "laminas/laminas-diactoros": "^2.11"
   },
   "autoload": {
     "psr-4": {

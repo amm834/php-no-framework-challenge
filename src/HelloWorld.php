@@ -4,8 +4,9 @@ namespace ExampleApp;
 
 class HelloWorld
 {
-    public function announce(): void
+    public function __invoke()
     {
-        echo "Hello autoload World";
+        echo "Hello world autoloaded";
+        exit;
     }
 }
