@@ -5,9 +5,11 @@ declare(strict_types=1);
 use DI\ContainerBuilder;
 use ExampleApp\HelloWorld;
 use FastRoute\RouteCollector;
+use Laminas\Diactoros\Response;
 use Laminas\Diactoros\ServerRequestFactory;
 use Middlewares\FastRoute;
 use Middlewares\RequestHandler;
+use Narrowspark\HttpEmitter\SapiEmitter;
 use Relay\Relay;
 use function DI\create;
 use function DI\get;
@@ -21,8 +23,11 @@ $containerBuilder = new ContainerBuilder();
 $containerBuilder->useAutowiring(false);
 $containerBuilder->useAnnotations(false);
 $containerBuilder->addDefinitions([
-    HelloWorld::class => create(HelloWorld::class)->constructor(get('Foo')),
-    'Foo' => 'bar'
+    HelloWorld::class => create(HelloWorld::class)->constructor(get('Foo'), get('Response')),
+    'Foo' => 'bar',
+    'Response' => function () {
+        return new Response();
+    },
 ]);
 
 $middlewareQueue = [];
@@ -46,5 +51,8 @@ $request = ServerRequestFactory::fromGlobals(
     $_FILES
 );
 
-$requestHandler->handle($request);
+$response = $requestHandler->handle($request);
+
+$emitter = new SapiEmitter();
+$emitter->emit($response);
 

@@ -2,18 +2,23 @@
 
 namespace ExampleApp;
 
+use Psr\Http\Message\ResponseInterface;
+
 class HelloWorld
 {
 
     public function __construct(
-        private string $foo,
+        private string            $foo,
+        private ResponseInterface $response
     )
     {
     }
 
-    public function __invoke()
+    public function __invoke(): ResponseInterface
     {
-        echo "Hello {$this->foo} autoload";
-        exit;
+        $response = $this->response->withHeader('Content-Type', 'text/html');
+        $response->getBody()
+            ->write("<html></head></head><body>Hello {$this->foo} world</body></html>");
+        return $response;
     }
 }
