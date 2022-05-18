@@ -1,0 +1,19 @@
+{
+  "name": "vendor_name/no-framework-challenge",
+  "description": "description",
+  "minimum-stability": "stable",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Aung Myat Moe",
+      "email": "email@example.com"
+    }
+  ],
+  "require": {
+  },
+  "autoload": {
+    "psr-4": {
+      "ExampleApp\\": "src"
+    }
+  }
+}
